@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/yargs": "^17.0.11",
+    "nodemon": "^2.0.19",
     "tsconfig.json": "^1.0.11"
   }
 }
