@@ -1,18 +1,15 @@
 #! /usr/bin/env node
 import fs from "fs/promises";
-import { isFile, isDirectory } from 'path-type';
-import yargs from "yargs";
-//chalk, inqurier, gradient, chalkAnimation, nanospinner
-const sleep = (ms = 2000) => {
-    new Promise((r) => setTimeout(r, ms));
-};
-let main = async (filePath, targerPath, referenceSize) => {
+import path from "path";
+import inquirer from "inquirer";
+import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
+const processCssFile = async (cssFilePath, outputCssPath, referenceSize) => {
     try {
-        const content = await fs.readFile(filePath, "utf-8");
+        const content = await fs.readFile(cssFilePath, "utf-8");
         const words = content.split("\n");
-        let newCss = words.map(elmnt => {
-            if (elmnt.trim().startsWith("font-size")) {
-                let temp = elmnt.split(":")[1];
+        let newCss = words.map(line => {
+            if (line.trim().startsWith("font-size")) {
+                let temp = line.split(":")[1];
                 if (temp !== null) {
                     let val = temp.match(/\d+/);
                     if (val) {
@@ -21,11 +18,11 @@ let main = async (filePath, targerPath, referenceSize) => {
                     }
                 }
             }
-            return elmnt;
+            return line;
         });
         let returned = newCss.join('\n');
         try {
-            await fs.writeFile(`${targerPath}\\output.css`, returned);
+            await fs.writeFile(outputCssPath, returned);
         }
         catch (err) {
             throw new Error('Something terribly bad have happend');
@@ -35,24 +32,71 @@ let main = async (filePath, targerPath, referenceSize) => {
         throw new Error('Something wrong happend');
     }
 };
-async function CLI() {
-    const { argv } = yargs(process.argv);
-    console.log(argv);
-    if (!("path" in argv) && !("ref" in argv) && !("target" in argv)) {
-        console.log("you must type --path , --ref and --target");
+const prompts = async () => {
+    inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
+    try {
+        const prompt = await inquirer.prompt([{
+                type: 'file-tree-selection',
+                name: 'cssFilePath',
+                validate: (item) => {
+                    return item.includes('.css') ? true : "Please choose a css file";
+                },
+                enableGoUpperDirectory: true,
+                message: "Select The css file you want to process"
+            },
+            {
+                type: 'file-tree-selection',
+                name: 'outputPath',
+                onlyShowDir: true,
+                message: "Select Where to save the new file"
+            },
+            {
+                type: "input",
+                name: "newCssFileName",
+                message: "What do you want to call your css output file",
+                default: "output"
+            },
+            {
+                type: "number",
+                name: "referenceValue",
+                message: "Please choose your reference value(in pixels) defaults to 14px",
+                default: 14
+            }]);
+        prompt.outputPath = path.join(prompt.outputPath, prompt.newCssFileName + '.css');
+        return prompt;
     }
-    else {
-        if (!(typeof argv['path'] === 'string' || typeof argv["ref"] !== "number") || typeof argv["target"] !== "string")
-            throw new Error("Error");
-        let isfile = await isFile(argv["path"]);
-        if (!isfile) {
-            throw new Error('Path is not to a file');
-        }
-        isfile = await isDirectory(argv["target"]);
-        if (!isfile) {
-            throw new Error('target is not to a DIR');
-        }
-        main(argv["path"], argv["target"], argv['ref']);
+    catch (err) {
+        throw new Error(err);
     }
-}
-CLI();
+};
+const main = async () => {
+    let answers = await prompts();
+    while (answers.cssFilePath === answers.outputPath) {
+        const askForOverwrite = await inquirer.prompt([{
+                type: "confirm",
+                name: "overwrite",
+                message: "This file already exists do you want to overwrite it?",
+                default: false
+            }
+        ]);
+        if (askForOverwrite.overwrite)
+            break;
+        const askForNewPath = await inquirer.prompt([
+            {
+                type: 'file-tree-selection',
+                name: 'outputPath',
+                onlyShowDir: true,
+                message: "Select Where to save the new file"
+            }, {
+                type: "input",
+                name: "newCssFileName",
+                message: "What do you want to call your css output file",
+                default: "output"
+            }
+        ]);
+        answers.outputPath = path.join(askForNewPath.outputPath, askForNewPath.newCssFileName + '.css');
+    }
+    console.log(answers);
+    processCssFile(answers.cssFilePath, answers.outputPath, answers.referenceValue);
+};
+main();
