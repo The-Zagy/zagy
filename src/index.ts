@@ -62,7 +62,7 @@ const prompts = async (): Promise<{ cssFilePath: string, outputPath: string, new
     //Add the fuzzy path plugin
     inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection)
     try {
-        const prompt: { cssFilePath: string, outputPath: string, newCssFileName: string, referenceValue: number } = await inquirer.prompt(
+        const mainPrompts: { cssFilePath: string, outputPath: string, newCssFileName: string, referenceValue: number } = await inquirer.prompt(
             [{
                 type: 'file-tree-selection',
                 name: 'cssFilePath',
@@ -93,9 +93,33 @@ const prompts = async (): Promise<{ cssFilePath: string, outputPath: string, new
                 default: 14
             }]
         )
-        prompt.outputPath = path.join(prompt.outputPath, prompt.newCssFileName + '.css');
-        return prompt;
+        mainPrompts.outputPath = path.join(mainPrompts.outputPath, mainPrompts.newCssFileName + '.css');
+        while (mainPrompts.cssFilePath === mainPrompts.outputPath) {
+            const askForOverwrite: { overwrite: boolean } = await inquirer.prompt([{
+                type: "confirm",
+                name: "overwrite",
+                message: "This file already exists do you want to overwrite it?",
+                default: false
+            }
+            ])
+            if (askForOverwrite.overwrite) break;
+            const askForNewPath: { outputPath: string, newCssFileName: string } = await inquirer.prompt([
+                {
+                    type: 'file-tree-selection',
+                    name: 'outputPath',
+                    onlyShowDir: true,
+                    message: "Select Where to save the new file"
+                }, {
+                    type: "input",
+                    name: "newCssFileName",
+                    message: "What do you want to call your css output file",
+                    default: "output"
+                }
+            ])
+            mainPrompts.outputPath = path.join(askForNewPath.outputPath, askForNewPath.newCssFileName + '.css');
 
+        }
+        return mainPrompts;
     }
 
     catch (err) {
@@ -107,32 +131,6 @@ const prompts = async (): Promise<{ cssFilePath: string, outputPath: string, new
 
 const main = async () => {
     let answers = await prompts();
-
-    while (answers.cssFilePath === answers.outputPath) {
-        const askForOverwrite: { overwrite: boolean } = await inquirer.prompt([{
-            type: "confirm",
-            name: "overwrite",
-            message: "This file already exists do you want to overwrite it?",
-            default: false
-        }
-        ])
-        if (askForOverwrite.overwrite) break;
-        const askForNewPath: { outputPath: string, newCssFileName: string } = await inquirer.prompt([
-            {
-                type: 'file-tree-selection',
-                name: 'outputPath',
-                onlyShowDir: true,
-                message: "Select Where to save the new file"
-            }, {
-                type: "input",
-                name: "newCssFileName",
-                message: "What do you want to call your css output file",
-                default: "output"
-            }
-        ])
-        answers.outputPath = path.join(askForNewPath.outputPath, askForNewPath.newCssFileName + '.css');
-
-    }
     console.log(answers)
     processCssFile(answers.cssFilePath, answers.outputPath, answers.referenceValue);
 }
