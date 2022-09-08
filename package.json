@@ -1,6 +1,6 @@
 {
   "name": "badcss",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.ts",
   "type": "module",
@@ -17,6 +17,11 @@
     "css"
   ],
   "author": "nagy , azzam ",
+  "homepage": "https://github.com/nagy-nabil/zagy#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nagy-nabil/zagy.git"
+  },
   "license": "ISC",
   "dependencies": {
     "fuzzy": "^0.1.3",
