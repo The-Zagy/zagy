@@ -3,6 +3,8 @@ import fs from "fs/promises";
 import path from "path";
 import inquirer from "inquirer";
 import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
+import yargs from "yargs";
+import INIT from "./init.js";
 const processCssFile = async (cssFilePath, outputCssPath, referenceSize) => {
     try {
         const content = await fs.readFile(cssFilePath, "utf-8");
@@ -95,8 +97,14 @@ const prompts = async () => {
     }
 };
 const main = async () => {
-    let answers = await prompts();
-    console.log(answers);
-    processCssFile(answers.cssFilePath, answers.outputPath, answers.referenceValue);
+    const { argv } = yargs(process.argv);
+    if ("init" in argv && typeof argv["init"] === "string") {
+        INIT(argv["init"]);
+    }
+    else {
+        let answers = await prompts();
+        console.log(answers);
+        processCssFile(answers.cssFilePath, answers.outputPath, answers.referenceValue);
+    }
 };
 main();

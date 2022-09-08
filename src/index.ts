@@ -4,6 +4,8 @@ import fs from "fs/promises";
 import path from "path";
 import inquirer from "inquirer";
 import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt'
+import yargs from "yargs";
+import INIT from "./init.js"
 //chalk, inqurier, gradient, chalkAnimation, nanospinner
 
 const processCssFile = async (cssFilePath: string, outputCssPath: string, referenceSize: number): Promise<void> => {
@@ -130,8 +132,13 @@ const prompts = async (): Promise<{ cssFilePath: string, outputPath: string, new
 
 
 const main = async () => {
-    let answers = await prompts();
-    console.log(answers)
-    processCssFile(answers.cssFilePath, answers.outputPath, answers.referenceValue);
+    const {argv} = yargs(process.argv)
+    if("init" in argv && typeof argv["init"] === "string") {
+        INIT(argv["init"])
+    }
+    else {
+        let answers = await prompts();
+        console.log(answers)
+        processCssFile(answers.cssFilePath, answers.outputPath, answers.referenceValue);}
 }
 main();

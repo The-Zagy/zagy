@@ -1,5 +1,11 @@
 # zagy
+## usage
+- edit bad css files 
+- init nodejs project
 
+### init
+``` zagy --init PROJECTNAME ```
+create nodejs project based on **typescript,eslint,prettier[,jest,jasmine]**
 ### The problem
 You have a very long css file with absolute units for font size and you want to make all the font sizes **Relative** to the **html** font size
 ### Solution
