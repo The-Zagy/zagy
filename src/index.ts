@@ -5,6 +5,7 @@ import path from "path";
 import inquirer from "inquirer";
 import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt'
 import yargs from "yargs";
+import { TestChoise } from "./types.js";
 import INIT from "./init.js"
 //chalk, inqurier, gradient, chalkAnimation, nanospinner
 
@@ -134,7 +135,11 @@ const prompts = async (): Promise<{ cssFilePath: string, outputPath: string, new
 const main = async () => {
     const {argv} = yargs(process.argv)
     if("init" in argv && typeof argv["init"] === "string") {
-        INIT(argv["init"])
+        if("t" in argv && argv["t"] === "jasmine"){
+            INIT(argv["init"],TestChoise.JASMINE)
+        }else {
+            INIT(argv["init"],TestChoise.JEST)
+        }
     }
     else {
         let answers = await prompts();
