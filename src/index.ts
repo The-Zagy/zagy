@@ -134,6 +134,15 @@ const prompts = async (): Promise<{ cssFilePath: string, outputPath: string, new
 
 const main = async () => {
     const {argv} = yargs(process.argv)
+    /**
+     * only do init project if the user supplied --init FOLDERNAME to the cli anything else open badcss cli
+     * if the user add -t to the cli can choose which testing option the project will work with the default is jest 
+     * there's only two options till now [jasmine , jest]
+     * * EXAMBLE
+    //  *  zagy --init project   [will work with jest]
+    // *   zagy --init project -t jest   [will work with jest]
+    // *   zagy --init project -t jasmine [will work with jasmine]
+     */
     if("init" in argv && typeof argv["init"] === "string") {
         if("t" in argv && argv["t"] === "jasmine"){
             INIT(argv["init"],TestChoise.JASMINE)

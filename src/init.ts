@@ -17,6 +17,7 @@ import {exec} from "child_process"
 import util from "node:util"
 import fs from "fs/promises"
 import path from "path"
+import * as jsonConfig from "./configjson.js"
 /**
  *  * util.promisify(FUNCTION) 
  * take a function that follows the callback (err,value) as its last argument and return promise version of it
@@ -28,136 +29,7 @@ import path from "path"
  * with two additional properties stdout and stderr.
  */
 const promiseExec = util.promisify(exec)
-function packageJson(name:string,test:TestChoise):string{
-    return `{
-        "name": "${name}",
-        "version": "1.0.0",
-        "type":"module",
-        "description": "",
-        "main": "dist/index.js",
-        "scripts": {
-            "start": "node  ./dist/index.js",
-            "build": "tsc --watch --preserveWatchOutput",
-            "dev": "nodemon  dist/index ",
-            "ts": "ts-node-esm src/index.ts",
-            "test": "${test}",
-            "prettier":"prettier --config .prettierrc \\"src/**/*.ts\\" --write",
-            "lint":"eslint . --ext .ts"
-        },
-        "keywords": [],
-        "author": "",
-        "license": "ISC"  
-    }`
-}
-function tsconfigJson():string{
-    return `{
-        "compilerOptions": {
-            "target": "es2021",
-            "module": "ES2022",
-            "lib": [
-                "dom",
-                "es2021"
-            ],
-            "sourceMap": false,
-            "outDir": "dist",
-            "rootDir": "src",
-            "strict": true,
-            "types": [
-                "node"
-            ],
-            "esModuleInterop": true,
-            "moduleResolution": "node",
-            "resolveJsonModule": true,
-            "baseUrl": ".",
-            "allowSyntheticDefaultImports": true,
-            "noUnusedLocals": true,
-            "noUnusedParameters": true,
-            "noImplicitReturns": true,
-            "noFallthroughCasesInSwitch": true,
-            "removeComments": true,
-            "allowJs": true
-        },
-        "include":["src"],
-        "exclude":["node_modules"]
-    }`
-}
-function prettierJson():string{
-    return `
-    {
-        "semi": true,
-        "trailingComma": "none",
-        "singleQuote": true,
-        "printWidth": 80
-    }`
-}
-function eslintJson():string{
-    return `
-    {
-        "root": true,
-        "plugins": [
-          "prettier",
-          "@typescript-eslint"
-        ],
-        "extends": [
-          "eslint:recommended",
-          "prettier",
-          "plugin:@typescript-eslint/recommended"
-        ],
-        "parser": "@typescript-eslint/parser",
-        "rules": {
-          "prettier/prettier": 2 ,
-          "no-use-before-define": ["error", { "functions": true, "classes": true }],
-          "no-var": "error",
-          "prefer-const": "error"
-        },
-        "parserOptions": {
-          "ecmaVersion": 2021
-        },
-        "env": {
-          "node": true,
-          "es6": true
-        }
-    }
-    `
-}
-function jasmineJson():string{
-    return `
-    {
-        "spec_dir": "dist/__tests__",
-        "spec_files": [
-          "**/*[sS]pec.?(m)js",
-          "!**/*nospec.js"
-        ],
-        "helpers": [
-          "helpers/**/*.?(m)js"
-        ],
-        "env": {
-          "failSpecWithNoExpectations": false,
-          "stopSpecOnExpectationFailure": false,
-          "stopOnSpecFailure": false,
-          "random": false
-        }
-      }
-    `
-}
-function reporterJson():string{
-    return `import {DisplayProcessor, SpecReporter, StacktraceOption} from "jasmine-spec-reporter";
-    import SuiteInfo = jasmine.SuiteInfo;
-    
-    class CustomProcessor extends DisplayProcessor {
-        public displayJasmineStarted(info: SuiteInfo, log: string): string {
-            return ${"`${log}`"};
-        }
-    }
-    
-    jasmine.getEnv().clearReporters();
-    jasmine.getEnv().addReporter(new SpecReporter({
-        spec: {
-            displayStacktrace: StacktraceOption.NONE
-        },
-        customProcessors: [CustomProcessor],
-    }));`
-}
+
 async function createProjectAntomy(FName:string,test:TestChoise):Promise<void>{
     const folderPath= path.resolve(FName)
     console.log(`initing your project in ${folderPath} .... `)
@@ -170,18 +42,20 @@ async function createProjectAntomy(FName:string,test:TestChoise):Promise<void>{
     console.log(`src ctrated ...`)
     await fs.writeFile(path.resolve("src","index.ts"),`console.log("HI IT'S ZAGY")`)
     console.log(`index.ts created ...`)
-    await fs.writeFile(path.resolve("package.json"),packageJson(FName,test))
+    await fs.writeFile(path.resolve(".gitignore"),jsonConfig.gitignoreJson())
+    console.log(`.gitignore created ...`)
+    await fs.writeFile(path.resolve("package.json"),jsonConfig.packageJson(FName,test))
     console.log(`package.json created ...`)
-    await fs.writeFile(path.resolve("tsconfig.json"),tsconfigJson())
+    await fs.writeFile(path.resolve("tsconfig.json"),jsonConfig.tsconfigJson(test))
     console.log(`tsconfig.json created ...`)
-    await fs.writeFile(path.resolve(".prettierrc"),prettierJson())
+    await fs.writeFile(path.resolve(".prettierrc"),jsonConfig.prettierJson())
     console.log(`.prettierrc created ...`)
-    await fs.writeFile(path.resolve(".eslintrc"),eslintJson())
+    await fs.writeFile(path.resolve(".eslintrc"),jsonConfig.eslintJson())
     console.log(`.eslintrc created ...`)
 }
 async function installDependencies():Promise<void>{
     console.log(`INSTALLING PROJECT DEPENDENCIES DON'T PANIC ...`)
-    const {stdout , stderr} = await promiseExec("npm i --save-dev typescript eslint prettier @types/node @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-prettier eslint-config-prettier")
+    const {stdout , stderr} = await promiseExec("npm i --save-dev ts-node typescript eslint prettier nodemon @types/node @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-prettier eslint-config-prettier")
     if (stderr){
         throw new Error(stderr)
     }
@@ -190,11 +64,11 @@ async function installDependencies():Promise<void>{
 async function jasmineAntomy():Promise<void>{
     await fs.mkdir(path.resolve("spec/support"),{recursive:true})
     console.log(`spec ctrated ...`)
-    await fs.writeFile(path.resolve("spec/support/jasmine.json"),jasmineJson())
+    await fs.writeFile(path.resolve("spec/support/jasmine.json"),jsonConfig.jasmineJson())
     console.log(`jasmine.json created ...`)
     await fs.mkdir(path.resolve("src/__tests__/helpers"),{recursive:true})
     console.log(`__tests__ ctrated ...`)
-    await fs.writeFile(path.resolve("src/__tests__/helpers/reporter.ts"),reporterJson())
+    await fs.writeFile(path.resolve("src/__tests__/helpers/reporter.ts"),jsonConfig.reporterJson())
     console.log(`reporter created ...`)
 }
 async function jasmineTest():Promise<void>{
@@ -206,6 +80,29 @@ async function jasmineTest():Promise<void>{
     console.log(stdout)
     await jasmineAntomy()
 }
+async function jestAntomy():Promise<void>{
+    await fs.mkdir(path.resolve("src/__tests__"))
+    console.log(`__tests__ ctrated ...`)
+    await fs.writeFile(path.resolve("jest.config.json"),jsonConfig.jestJson())
+    console.log(`jest.config.js created ...`)
+}
+async function jestTest():Promise<void>{
+    console.log(`INSTALLING JEST DEPENDENCCIES DON'T PANIC ...`)
+    const {stdout , stderr} = await promiseExec("npm i --save-dev jest @types/jest cross-env")
+    if(stderr){
+        console.log(stderr)
+    }
+    console.log(stdout)
+    await jestAntomy()
+}
+/**
+ * function to initalize project with that form 
+ * [
+ * ]
+ * 
+ * @param FName 
+ * @param test 
+ */
 export default async function initProject (FName:string,test:TestChoise):Promise<void>{
     try{
         //create project folders and config files
@@ -216,8 +113,7 @@ export default async function initProject (FName:string,test:TestChoise):Promise
         if(test=== TestChoise.JASMINE) {
         await jasmineTest()
         }else {
-            //await jestTest()
-            console.log("jest")
+            await jestTest()
         }
         console.log("Your Project Has Been Created Successfully, Happy Coding")
     }catch(err){
