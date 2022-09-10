@@ -1,12 +1,73 @@
+<link href="./markdown.css" rel="stylesheet">
 
 
-<div align="center">
-	<br>
-	<a href="">
-		<img src="svgedREADME.svg" width="800" height="400" alt="Click to see the source">
-	</a>
-	<br>
+<h1 class="main-header">zagy</h1>
+
+ <h2> Installation</h2>
+<code>npm i -g badcss</code>
+<h3 classname="usage">usage</h3>
+
+<ul>
+<li> edit bad css files => Just type <code>zagy</code> in the terminal and a nice interface will appear to ask you some question like where is the file you want to edit and where do you want the output to be</li>
+
+<li>Init nodejs project => Type <code>zagy --init <foldername> [-t <jest|jasmine>]</code></li>
+</ul>
+<br/>
+<div style="display:flex; justify-content:space-between;">
+<div>
+<code>zagy --init sample -t jasmine</code>
+<pre style="display:inline-block; background-color:transparent;">
+<em>#Jasmine</em>
+.
+└── app/
+    ├── dist
+    ├── node_modules
+    ├── spec/
+    │   └── support/
+    │       └── jasmine.json
+    ├── src/
+    │   ├── __tests__/
+    │   │   ├── helpers/
+    │   │   │   └── reporter.ts
+    │   │   └── indexSpec.ts
+    │   └── index.ts
+    ├── .eslintrc
+    ├── .gitignore
+    ├── .prettierrc
+    ├── package-lock.json
+    ├── package.json
+    └── tsconfig.json
+</pre>
 </div>
+<div>
+<code>zagy --init sample -t jest</code><br/>
+<em>or</em>&nbsp;
+<code>zagy --init sample</code>
+<pre style="display:inline-block; background-color:transparent;">
+<em>#Jest</em>
+.
+└── app/
+    ├── dist
+    ├── node_modules
+    ├── src/
+    │   ├── __tests__/
+    │   │   └── index.spec.ts
+    │   └── index.ts
+    ├── .eslintrc
+    ├── .gitignore
+    ├── .prettierrc
+    ├── jest.config.json
+    ├── package-lock.json
+    ├── package.json
+    └── tsconfig.json
+</pre>
+</div>
+
+</div>
+
+
+
+
 
 ### init
 `` zagy --init PROJECTNAME`` <br/>

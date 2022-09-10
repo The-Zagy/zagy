@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+.main-header{
+font-family: 'Great Vibes', cursive;
+font-size:200px;
+width:fit-content;
+margin:auto;
+background: rgb(91,207,250);
+background: linear-gradient(90deg, rgba(91,207,250,1) 0%, rgba(91,207,250,1) 22%, rgba(245,170,185,1) 23%, rgba(245,170,185,1) 42%, rgba(254,254,254,1) 44%, rgba(232,232,232,1) 61%, rgba(245,170,185,1) 62%, rgba(245,170,185,1) 80%, rgba(91,207,250,1) 81%, rgba(91,207,250,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
