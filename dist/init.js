@@ -43,6 +43,8 @@ async function jasmineAntomy() {
     console.log(`__tests__ ctrated ...`);
     await fs.writeFile(path.resolve("src/__tests__/helpers/reporter.ts"), jsonConfig.reporterJson());
     console.log(`reporter created ...`);
+    await fs.writeFile(path.resolve("src/__tests__/indexSpec.ts"), `//sample test`);
+    console.log(`indexSpec.ts created ...`);
 }
 async function jasmineTest() {
     console.log(`INSTALLING JASMINE DEPENDENCCIES DON'T PANIC ...`);
@@ -58,6 +60,8 @@ async function jestAntomy() {
     console.log(`__tests__ ctrated ...`);
     await fs.writeFile(path.resolve("jest.config.json"), jsonConfig.jestJson());
     console.log(`jest.config.js created ...`);
+    await fs.writeFile(path.resolve("src/__tests__/index.spec.ts"), `//sample test`);
+    console.log(`index.spec.ts created ...`);
 }
 async function jestTest() {
     console.log(`INSTALLING JEST DEPENDENCCIES DON'T PANIC ...`);
