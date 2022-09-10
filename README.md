@@ -1,3 +1,5 @@
+<svg fill="none" viewBox="0 0 800 10000" width="800" height="100%" xmlns="http://www.w3.org/2000/svg">
+<foreignObject width="100%" height="100%">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 .main-header{
@@ -10,16 +12,21 @@ background: linear-gradient(90deg, rgba(91,207,250,1) 0%, rgba(91,207,250,1) 22%
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 </style>
 
 <h1 class="main-header">zagy</h1>
 
-## Installation
-``npm i -g badcss``
+ <h2> Installation</h2>
+<code>npm i -g badcss</code>
+<h3 classname="usage">usage</h3>
 
-## usage
-- edit bad css files => Just type ``zagy`` in the terminal and a nice interface will appear to ask you some question like where is the file you want to edit and where do you want the output to be
-- Init nodejs project => Type ``zagy --init <foldername> [-t <jest|jasmine>]``<br/>
+<ul>
+<li> edit bad css files => Just type <code>zagy</code> in the terminal and a nice interface will appear to ask you some question like where is the file you want to edit and where do you want the output to be</li>
+
+<li>Init nodejs project => Type <code>zagy --init <foldername> [-t <jest|jasmine>]</code></li>
+</ul>
+<br/>
 <div style="display:flex; justify-content:space-between;">
 <div>
 <code>zagy --init sample -t jasmine</code>
@@ -69,7 +76,9 @@ background: linear-gradient(90deg, rgba(91,207,250,1) 0%, rgba(91,207,250,1) 22%
     └── tsconfig.json
 </pre>
 </div>
+
 </div>
+
 
 ### init
 `` zagy --init PROJECTNAME`` <br/>
