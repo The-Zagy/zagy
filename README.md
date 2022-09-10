@@ -1,84 +1,12 @@
-<svg fill="none" viewBox="0 0 800 10000" width="800" height="100%" xmlns="http://www.w3.org/2000/svg">
-<foreignObject width="100%" height="100%">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-.main-header{
-font-family: 'Great Vibes', cursive;
-font-size:200px;
-width:fit-content;
-margin:auto;
-background: rgb(91,207,250);
-background: linear-gradient(90deg, rgba(91,207,250,1) 0%, rgba(91,207,250,1) 22%, rgba(245,170,185,1) 23%, rgba(245,170,185,1) 42%, rgba(254,254,254,1) 44%, rgba(232,232,232,1) 61%, rgba(245,170,185,1) 62%, rgba(245,170,185,1) 80%, rgba(91,207,250,1) 81%, rgba(91,207,250,1) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
-</style>
 
-<h1 class="main-header">zagy</h1>
-
- <h2> Installation</h2>
-<code>npm i -g badcss</code>
-<h3 classname="usage">usage</h3>
-
-<ul>
-<li> edit bad css files => Just type <code>zagy</code> in the terminal and a nice interface will appear to ask you some question like where is the file you want to edit and where do you want the output to be</li>
-
-<li>Init nodejs project => Type <code>zagy --init <foldername> [-t <jest|jasmine>]</code></li>
-</ul>
-<br/>
-<div style="display:flex; justify-content:space-between;">
-<div>
-<code>zagy --init sample -t jasmine</code>
-<pre style="display:inline-block; background-color:transparent;">
-<em>#Jasmine</em>
-.
-└── app/
-    ├── dist
-    ├── node_modules
-    ├── spec/
-    │   └── support/
-    │       └── jasmine.json
-    ├── src/
-    │   ├── __tests__/
-    │   │   ├── helpers/
-    │   │   │   └── reporter.ts
-    │   │   └── indexSpec.ts
-    │   └── index.ts
-    ├── .eslintrc
-    ├── .gitignore
-    ├── .prettierrc
-    ├── package-lock.json
-    ├── package.json
-    └── tsconfig.json
-</pre>
+<div align="center">
+	<br>
+	<a href="">
+		<img src="svgedREADME.svg" width="800" height="400" alt="Click to see the source">
+	</a>
+	<br>
 </div>
-<div>
-<code>zagy --init sample -t jest</code><br/>
-<em>or</em>&nbsp;
-<code>zagy --init sample</code>
-<pre style="display:inline-block; background-color:transparent;">
-<em>#Jest</em>
-.
-└── app/
-    ├── dist
-    ├── node_modules
-    ├── src/
-    │   ├── __tests__/
-    │   │   └── index.spec.ts
-    │   └── index.ts
-    ├── .eslintrc
-    ├── .gitignore
-    ├── .prettierrc
-    ├── jest.config.json
-    ├── package-lock.json
-    ├── package.json
-    └── tsconfig.json
-</pre>
-</div>
-
-</div>
-
 
 ### init
 `` zagy --init PROJECTNAME`` <br/>
@@ -148,3 +76,4 @@ Now all the font in your page is relative to the html tag and you can resize the
 
  1. Other absolute units handling other than px
  2. Automatic additon of the reference font-size in the html tag
+
