@@ -1,4 +1,4 @@
-<link href="https://github.com/nagy-nabil/zagy/blob/main/markdown.css" rel="stylesheet">
+<link href="./markdown.css" rel="stylesheet">
 
 
 <h1 class="main-header">zagy</h1>
