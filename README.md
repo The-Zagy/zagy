@@ -1,7 +1,4 @@
-<link href="./markdown.css" rel="stylesheet">
-
-
-<h1 class="main-header">zagy</h1>
+# ZAGY
 
  <h2> Installation</h2>
 <code>npm i -g badcss</code>
