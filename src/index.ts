@@ -133,7 +133,8 @@ const prompts = async (): Promise<{ cssFilePath: string, outputPath: string, new
 
 
 const main = async () => {
-    const {argv} = yargs(process.argv)
+    //init yargs
+    const {argv} = yargs(process.argv).option("init", {demandOption: true, type: "string"})
     /**
      * only do init project if the user supplied --init FOLDERNAME to the cli anything else open badcss cli
      * if the user add -t to the cli can choose which testing option the project will work with the default is jest 

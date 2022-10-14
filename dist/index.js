@@ -98,7 +98,7 @@ const prompts = async () => {
     }
 };
 const main = async () => {
-    const { argv } = yargs(process.argv);
+    const { argv } = yargs(process.argv).option("init", { demandOption: true, type: "string" });
     if ("init" in argv && typeof argv["init"] === "string") {
         if ("t" in argv && argv["t"] === "jasmine") {
             INIT(argv["init"], TestChoise.JASMINE);

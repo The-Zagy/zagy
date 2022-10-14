@@ -12,8 +12,8 @@
  * hardcode .prettierrc 
  * TODO let the user choose between jest and jasmine 
  */
-import {TestChoise} from "./types.js"
-import {exec} from "child_process"
+import { TestChoise } from "./types.js"
+import { spawn } from "child_process"
 import util from "node:util"
 import fs from "fs/promises"
 import path from "path"
@@ -28,8 +28,8 @@ import * as jsonConfig from "./configjson.js"
  * resulting in an exit code other than 0), a rejected promise is returned, with the same error object given in the callback, but 
  * with two additional properties stdout and stderr.
  */
-const promiseExec = util.promisify(exec)
-
+// const promiseExec = util.promisify(exec)
+// const promiseSpawn = util.promisify(spawn)
 async function createProjectAntomy(FName:string,test:TestChoise):Promise<void>{
     const folderPath= path.resolve(FName)
     console.log(`initing your project in ${folderPath} .... `)
@@ -53,13 +53,17 @@ async function createProjectAntomy(FName:string,test:TestChoise):Promise<void>{
     await fs.writeFile(path.resolve(".eslintrc"),jsonConfig.eslintJson())
     console.log(`.eslintrc created ...`)
 }
-async function installDependencies():Promise<void>{
+function installDependencies(testDep: string): void{
+    let shell = 'npm i --save-dev ts-node typescript eslint prettier nodemon @types/node @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-prettier eslint-config-prettier' + ' ' + testDep;
     console.log(`INSTALLING PROJECT DEPENDENCIES DON'T PANIC ...`)
-    const {stdout , stderr} = await promiseExec("npm i --save-dev ts-node typescript eslint prettier nodemon @types/node @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-prettier eslint-config-prettier")
-    if (stderr){
-        throw new Error(stderr)
-    }
-    console.log(stdout)
+    // const {stdout , stderr} = await promiseExec("npm i --save-dev ts-node typescript eslint prettier nodemon @types/node @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-prettier eslint-config-prettier")
+    // if (stderr){
+    //     throw new Error(stderr)
+    // }
+    // console.log(stdout)
+    //*switched to spawn to use its feature to stream the ouput instead of buffering the output and then show it to the user
+    //* and also changed executing more than shell now the main method send to @installDependencies the packages required for testing and we install all of them in the same shell => the next spawn is what i mean with shell
+    spawn(shell, {stdio: "inherit", shell: true});
 }
 async function jasmineAntomy():Promise<void>{
     await fs.mkdir(path.resolve("spec/support"),{recursive:true})
@@ -73,14 +77,21 @@ async function jasmineAntomy():Promise<void>{
     await fs.writeFile(path.resolve("src/__tests__/indexSpec.ts"),`//sample test`)
     console.log(`indexSpec.ts created ...`)
 }
-async function jasmineTest():Promise<void>{
-    console.log(`INSTALLING JASMINE DEPENDENCCIES DON'T PANIC ...`)
-    const {stdout , stderr} = await promiseExec("npm i --save-dev jasmine jasmine-spec-reporter @types/jasmine")
-    if(stderr){
-        console.log(stderr)
-    }
-    console.log(stdout)
-    await jasmineAntomy()
+//! now only return jasmine dependinces as string and the antomy should be executed in the main method
+function jasmineTestDep(): string{
+    // const shell = 'npm i --save-dev jasmine jasmine-spec-reporter @types/jasmine';
+    // console.log(`INSTALLING JASMINE DEPENDENCCIES DON'T PANIC ...`)
+    // const {stdout , stderr} = await promiseExec("npm i --save-dev jasmine jasmine-spec-reporter @types/jasmine")
+    // if(stderr){
+    //     console.log(stderr)
+    // }
+    // console.log(stdout)
+    // await jasmineAntomy()
+    // spawn(shell, {
+    //     stdio: "inherit",
+    //     shell: true
+    // });
+    return 'jasmine jasmine-spec-reporter @types/jasmine'
 }
 async function jestAntomy():Promise<void>{
     await fs.mkdir(path.resolve("src/__tests__"))
@@ -90,14 +101,22 @@ async function jestAntomy():Promise<void>{
     await fs.writeFile(path.resolve("src/__tests__/index.spec.ts"),`//sample test`)
     console.log(`index.spec.ts created ...`)
 }
-async function jestTest():Promise<void>{
-    console.log(`INSTALLING JEST DEPENDENCCIES DON'T PANIC ...`)
-    const {stdout , stderr} = await promiseExec("npm i --save-dev jest @types/jest cross-env")
-    if(stderr){
-        console.log(stderr)
-    }
-    console.log(stdout)
-    await jestAntomy()
+//! now only return jest dependinces as string and the antomy should be executed in the main method
+function jestTestDep(): string{
+    // const shell = 'npm i --save-dev jest @types/jest cross-env';
+    // console.log(`INSTALLING JEST DEPENDENCCIES DON'T PANIC ...`)
+    // const {stdout , stderr} = await promiseExec("npm i --save-dev jest @types/jest cross-env")
+    // if(stderr){
+    //     console.log(stderr)
+    // }
+    // console.log(stdout)
+    // spawn(shell, {stdio: "inherit", shell: true});
+    // await jestAntomy()
+    // await promiseSpawn(shell,[], {
+    //     stdio: "inherit",
+    //     shell: true
+    // });
+    return 'jest @types/jest cross-env';
 }
 /**
  * function to initalize project with that form 
@@ -109,17 +128,20 @@ async function jestTest():Promise<void>{
  */
 export default async function initProject (FName:string,test:TestChoise):Promise<void>{
     try{
+        let testDep = '';
         //create project folders and config files
         await createProjectAntomy(FName,test)
         // install node dependencies
-        await installDependencies()
         console.log(`NOTE => our testing configuration test the compiled Javascript`)
         if(test=== TestChoise.JASMINE) {
-        await jasmineTest()
+            await jasmineAntomy()
+            testDep = jasmineTestDep();
         }else {
-            await jestTest()
+            await jestAntomy()
+            testDep = jestTestDep();
         }
-        console.log("Your Project Has Been Created Successfully, Happy Coding")
+        console.log("Your Project Antomy Has Been Created Successfully Now Installing Dependencies, Happy Coding")
+        installDependencies(testDep)
     }catch(err){
         console.log(err)
     }
