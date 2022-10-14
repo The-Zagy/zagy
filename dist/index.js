@@ -98,8 +98,10 @@ const prompts = async () => {
     }
 };
 const main = async () => {
-    const { argv } = yargs(process.argv).option("init", { demandOption: true, type: "string" });
+    const { argv } = yargs(process.argv).option("init", { demandOption: false, type: "string" });
     if ("init" in argv && typeof argv["init"] === "string") {
+        if (!(argv["init"].length > 0))
+            throw new Error("Please supply a folder name");
         if ("t" in argv && argv["t"] === "jasmine") {
             INIT(argv["init"], TestChoise.JASMINE);
         }

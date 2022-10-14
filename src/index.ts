@@ -134,7 +134,7 @@ const prompts = async (): Promise<{ cssFilePath: string, outputPath: string, new
 
 const main = async () => {
     //init yargs
-    const {argv} = yargs(process.argv).option("init", {demandOption: true, type: "string"})
+    const { argv } = yargs(process.argv).option("init", { demandOption: false, type: "string" })
     /**
      * only do init project if the user supplied --init FOLDERNAME to the cli anything else open badcss cli
      * if the user add -t to the cli can choose which testing option the project will work with the default is jest 
@@ -144,16 +144,18 @@ const main = async () => {
     // *   zagy --init project -t jest   [will work with jest]
     // *   zagy --init project -t jasmine [will work with jasmine]
      */
-    if("init" in argv && typeof argv["init"] === "string") {
-        if("t" in argv && argv["t"] === "jasmine"){
-            INIT(argv["init"],TestChoise.JASMINE)
-        }else {
-            INIT(argv["init"],TestChoise.JEST)
+    if ("init" in argv && typeof argv["init"] === "string") {
+        if (!(argv["init"].length > 0)) throw new Error("Please supply a folder name");
+        if ("t" in argv && argv["t"] === "jasmine") {
+            INIT(argv["init"], TestChoise.JASMINE)
+        } else {
+            INIT(argv["init"], TestChoise.JEST)
         }
     }
     else {
         let answers = await prompts();
         console.log(answers)
-        processCssFile(answers.cssFilePath, answers.outputPath, answers.referenceValue);}
+        processCssFile(answers.cssFilePath, answers.outputPath, answers.referenceValue);
+    }
 }
 main();
