@@ -26,5 +26,6 @@
         "noFallthroughCasesInSwitch": true,
         "removeComments": true,
         "allowJs": true
-    }
+    },
+    "exclude": ["node_modules", "dist", "template", "tester"]
 }
