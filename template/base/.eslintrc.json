@@ -20,10 +20,11 @@
         "caughtErrorsIgnorePattern": "^_"
       }
     ],
-    "prettier/prettier": 2 ,
+    "prettier/prettier": 1,
     "no-use-before-define": ["error", { "functions": true, "classes": true }],
     "no-var": "error",
-    "prefer-const": "error"
+    "prefer-const": "error",
+    "no-trailing-spaces": ["warn", {"ignoreComments": true}]
   },
   "overrides": [{
     "files": ["**/*.ts"],
