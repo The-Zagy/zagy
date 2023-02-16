@@ -2,6 +2,7 @@
   "name": "base",
   "version": "1.0.0",
   "description": "node-js base template no flavors at all",
+  "type": "module",
   "keywords": [],
   "main": "dist/index.js",
   "scripts": {
@@ -10,7 +11,7 @@
     "test": "jest",
     "build:watch": "tsc --watch --preserveWatchOutput",
     "dev": "nodemon  dist/index",
-    "ts": "ts-node-esm src/index.ts",
+    "ts": "ts-node src/index.ts",
     "lint": "eslint . --ext .ts",
     "prettier": "prettier --config .prettierrc \"src/**/*.ts\" --write"
   },
