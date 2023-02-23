@@ -25,7 +25,8 @@
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
         "removeComments": true,
-        "allowJs": true
+        "allowJs": true,
+        "declaration": true
     },
     "exclude": ["node_modules", "dist", "template", "tester"]
 }

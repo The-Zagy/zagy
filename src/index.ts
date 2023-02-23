@@ -29,4 +29,4 @@ const main = async () => {
     program.parse();
 }
 
-main();
+await main();

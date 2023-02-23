@@ -9,7 +9,7 @@
   },
   "scripts": {
     "watch": "tsc -w",
-    "build": "npm run watch",
+    "build": "tsc",
     "dev": "nodemon --experimental-vm-modules dist/index.js",
     "start": "node dist/index.js"
   },

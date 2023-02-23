@@ -1,6 +1,6 @@
 /**
  * zagy --init -f[f for folderName], How it works =>
- * log initializing project path 
+ * log initializing project path
  * mkdir -f
  * cp template/base new-path
  * TODO make the user choose the extra needed for the project
@@ -11,18 +11,22 @@
 import { execFileSync } from "child_process";
 import inquirer from "inquirer";
 // import util from "node:util"
-import fs from "fs/promises"
-import path from "path"
+import fs from "fs/promises";
+import path from "path";
 import { pkgRoot } from "./constants.js";
+import {
+    availableAddOnes,
+    availableAddOnesInstallerMap,
+} from "./helpers/addones-types.js";
 
 /**
- *  * util.promisify(FUNCTION) 
+ *  * util.promisify(FUNCTION)
  * take a function that follows the callback (err,value) as its last argument and return promise version of it
  * so we're using the promisfy version of child_process.exec to keep the async await core in the code
  * * from nodejs docs https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
- * If this method is invoked as its util.promisify()ed version, it returns a Promise for an Object with stdout and stderr properties. 
- * The returned ChildProcess instance is attached to the Promise as a child property. In case of an error (including any error 
- * resulting in an exit code other than 0), a rejected promise is returned, with the same error object given in the callback, but 
+ * If this method is invoked as its util.promisify()ed version, it returns a Promise for an Object with stdout and stderr properties.
+ * The returned ChildProcess instance is attached to the Promise as a child property. In case of an error (including any error
+ * resulting in an exit code other than 0), a rejected promise is returned, with the same error object given in the callback, but
  * with two additional properties stdout and stderr.
  */
 // const promiseExec = util.promisify(exec)
@@ -31,32 +35,40 @@ import { pkgRoot } from "./constants.js";
 async function copyBaseTemplate(newProjectPath: string): Promise<void> {
     // make folder and copy
     await fs.mkdir(newProjectPath);
-    await fs.cp(path.join(pkgRoot, 'template/base'), newProjectPath, {recursive: true});
+    await fs.cp(path.join(pkgRoot, "template/base"), newProjectPath, {
+        recursive: true,
+    });
 
     // in the template .gitignore is renamed to tempGitIgnore to not affect the package git tree but it must be rename to the user to work as intended
-    await fs.rename(path.join(newProjectPath, 'tempGitIgnore'), path.join(newProjectPath, '.gitignore'));
+    await fs.rename(
+        path.join(newProjectPath, "tempGitIgnore"),
+        path.join(newProjectPath, ".gitignore")
+    );
 }
 
 function isUnderGit(folderPath: string): boolean {
     try {
-        execFileSync('git', ['rev-parse', '--is-inside-work-tree'], {cwd: folderPath, stdio: "ignore"});
-        console.log('under git');
+        execFileSync("git", ["rev-parse", "--is-inside-work-tree"], {
+            cwd: folderPath,
+            stdio: "ignore",
+        });
+        console.log("under git");
         return true;
-    } catch(e) {
-        console.error('error not under git')
+    } catch (e) {
+        console.error("error not under git");
         return false;
     }
 }
 
 function initGit(folderPath: string) {
-    execFileSync('git', ['init'], {cwd: folderPath, stdio: "ignore"});
-    execFileSync('git', ['add', '.'], {cwd: folderPath, stdio: "ignore"});
+    execFileSync("git", ["init"], { cwd: folderPath, stdio: "ignore" });
+    execFileSync("git", ["add", "."], { cwd: folderPath, stdio: "ignore" });
 }
 
 // function installDependencies(testDep: string): void {
-    //change process dir to the new folder
-    // process.chdir(FName)
-    // console.log(path.resolve())
+//change process dir to the new folder
+// process.chdir(FName)
+// console.log(path.resolve())
 //     let shell = 'npm i --save-dev ts-node typescript eslint prettier nodemon @types/node @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-prettier eslint-config-prettier' + ' ' + testDep;
 //     console.log(`INSTALLING PROJECT DEPENDENCIES DON'T PANIC ...`)
 //     // const {stdout , stderr} = await promiseExec("npm i --save-dev ts-node typescript eslint prettier nodemon @types/node @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-prettier eslint-config-prettier")
@@ -72,33 +84,40 @@ function initGit(folderPath: string) {
 interface ProjectMetaDataAnswers {
     projectName: string;
     initGit: boolean;
+    addOnes: typeof availableAddOnes;
 }
 // if the project name already was supplied to the functions won't ask again about the name
-async function questionsSession(projectName?: string){
-    
-    const answers = await inquirer.prompt<ProjectMetaDataAnswers>([
-        {
-        name: 'projectName',
-        type: 'input',
-        message: 'project name',
-        default: 'zagy-app',
-        },
-        {
-            name: 'initGit',
-            type: 'confirm',
-            message: 'do you want to init git repo',
-            default: true
-        }
-    ], {projectName})
-    console.log("🪵 file \"init.ts\" ~  line \"73\" ~ token ~ answers = ", answers);
-    return answers
+async function questionsSession(projectName?: string) {
+    const answers = await inquirer.prompt<ProjectMetaDataAnswers>(
+        [
+            {
+                name: "projectName",
+                type: "input",
+                message: "project name",
+                default: "zagy-app",
+            },
+            {
+                name: "initGit",
+                type: "confirm",
+                message: "do you want to init git repo",
+                default: true,
+            },
+            {
+                name: "addOnes",
+                message: "which addones do you need",
+                type: "checkbox",
+                choices: availableAddOnes,
+            },
+        ],
+        { projectName }
+    );
+    console.log('🪵 file "init.ts" ~  line "73" ~ token ~ answers = ', answers);
+    return answers;
 }
 
 /**
- * function to initalize project with that form 
- * [
- * ]
- * 
+ * init a project skelton
+ *
  * @param FName folder name
  */
 export default async function initProject(FName?: string): Promise<void> {
@@ -109,13 +128,20 @@ export default async function initProject(FName?: string): Promise<void> {
         //create project folders and config files
         await copyBaseTemplate(newProjectPath);
 
+        for (const addone of answers.addOnes) {
+            await availableAddOnesInstallerMap[addone]({
+                projectPath: newProjectPath,
+            });
+        }
+
         if (answers.initGit) {
             if (!isUnderGit(newProjectPath)) {
                 initGit(newProjectPath);
             } else {
-                console.error('already under git repo');
+                console.error("already under git repo");
             }
         }
+
         // TODO install node dependencies
         // installDependencies(testDep)
     } catch (err) {
