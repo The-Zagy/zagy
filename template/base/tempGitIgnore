@@ -108,4 +108,4 @@ public
 .vscode
 dev
 __tests__
-    
+dist
