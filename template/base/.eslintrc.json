@@ -1,0 +1,60 @@
+{
+  "root": true,
+  "plugins": [
+    "prettier",
+    "@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "prettier",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "prettier/prettier": 1,
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": true,
+        "classes": true
+      }
+    ],
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-trailing-spaces": [
+      "warn",
+      {
+        "ignoreComments": true
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts"
+      ],
+      "excludedFiles": [
+        "**/*.js"
+      ]
+    }
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2022,
+    "project": [
+      "./tsconfig.json"
+    ]
+  },
+  "env": {
+    "node": true,
+    "es6": true
+  }
+}
