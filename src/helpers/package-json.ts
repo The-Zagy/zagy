@@ -57,7 +57,7 @@ export const upsertField = async (
     const pkj = await fs.readFile(path, { encoding: "utf-8" });
     const pkjParsed = JSON.parse(pkj) as PackageJson;
     for (const field of nameKeyValue) {
-        pkjParsed[field[0]][field[1]] = field[1];
+        pkjParsed[field[0]][field[1]] = field[2];
     }
     const pkjStringified = JSON.stringify(pkjParsed, null, 2);
     await fs.writeFile(path, pkjStringified);
