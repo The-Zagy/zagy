@@ -1,6 +1,6 @@
 {
   "name": "zagy",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "create node.js server base template",
   "main": "index.ts",
   "type": "module",
@@ -19,7 +19,7 @@
     "create",
     "zagy"
   ],
-  "author": "nagy , azzam ",
+  "author": "The-Zagy",
   "homepage": "https://github.com/The-Zagy/zagy#readme",
   "repository": {
     "type": "git",
