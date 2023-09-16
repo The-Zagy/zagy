@@ -13,6 +13,7 @@
     "dev": "nodemon  dist/index",
     "ts": "ts-node src/index.ts",
     "lint": "eslint . --ext .ts",
+    "format": "eslint src/**/*.ts --fix",
     "prettier": "prettier --config .prettierrc \"src/**/*.ts\" --write"
   },
   "author": "the-zagy",

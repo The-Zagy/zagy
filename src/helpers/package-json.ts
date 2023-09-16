@@ -62,17 +62,24 @@ export const upsertField = async (
     const pkjStringified = JSON.stringify(pkjParsed, null, 2);
     await fs.writeFile(path, pkjStringified);
 };
-
-// type PackageJsonOp = {
-//     [key in keyof PackageJson]?: PackageJson[key]
-// }
-// export const updatePackageJson = async (path: string, fields : PackageJsonOp): Promise<void> => {
+// type PackageJsonOp  = {
+//     [key in keyof PackageJson]?: PackageJson[key];
+// };
+// export const updatePackageJson = async (
+//     path: string,
+//     fields: PackageJsonOp
+// ): Promise<void> => {
 //     const pkj = await fs.readFile(path, { encoding: "utf-8" });
 //     const pkjParsed = JSON.parse(pkj) as PackageJson;
-//     for (const field of Object.entries(fields)) {
-//         if (field[1] instanceof String) {
-//             field[1]
-//             pkjParsed[field[0] as keyof PackageJson] = field[1];
+//     let key: keyof PackageJson;
+//     for (key in fields) {
+//         if (
+//             fields[key] !== undefined &&
+//             typeof fields[key] === "string" &&
+//             typeof pkjParsed[key] === "string"
+//         ) {
+//             pkjParsed[key as keyof PackageJsonMeta] =
+//                 fields[key as keyof PackageJsonMeta];
 //         }
 //     }
-// }
+// };

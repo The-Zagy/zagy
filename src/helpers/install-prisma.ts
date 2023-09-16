@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs/promises";
-import type { Installer } from "./addones-types";
+import type { Installer } from "./addones-types.js";
 import { pkgRoot } from "../constants.js";
 import { upsertField } from "./package-json.js";
 

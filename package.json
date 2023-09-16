@@ -1,7 +1,7 @@
 {
   "name": "badcss",
   "version": "0.1.3",
-  "description": "",
+  "description": "create node.js server base template",
   "main": "index.ts",
   "type": "module",
   "bin": {
@@ -20,10 +20,10 @@
     "zagy"
   ],
   "author": "nagy , azzam ",
-  "homepage": "https://github.com/nagy-nabil/zagy#readme",
+  "homepage": "https://github.com/The-Zagy/zagy#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nagy-nabil/zagy.git"
+    "url": "git+https://github.com/The-Zagy/zagy.git"
   },
   "license": "ISC",
   "dependencies": {
@@ -31,14 +31,14 @@
     "fuzzy": "^0.1.3",
     "inquirer": "^9.1.0",
     "inquirer-file-tree-selection-prompt": "^2.0.4",
-    "path-type": "^5.0.0"
+    "path-type": "^5.0.0",
+    "typescript": "^5.0.4"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.1",
-    "@types/node": "^18.7.8",
+    "@types/node": "^18.15.11",
     "@types/nodemon": "^1.19.2",
     "@types/yargs": "^17.0.11",
-    "nodemon": "^2.0.19",
-    "typescript": "^4.7.4"
+    "nodemon": "^2.0.19"
   }
 }

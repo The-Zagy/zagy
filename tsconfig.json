@@ -1,22 +1,15 @@
 {
     "compilerOptions": {
         "target": "ESNext",
-        "module": "ESNext",
-        "lib": [
-            "dom",
-            "es6",
-            "es2017",
-            "esnext.asynciterable"
-        ],
-        "sourceMap": false,
+        "module": "NodeNext",
+        "lib": ["es6", "es2017", "esnext.asynciterable"],
+        "sourceMap": true,
         "outDir": "dist",
         "rootDir": "src",
         "strict": true,
-        "types": [
-            "node"
-        ],
+        "types": ["node"],
         "esModuleInterop": true,
-        "moduleResolution": "node",
+        "moduleResolution": "nodenext",
         "resolveJsonModule": true,
         "baseUrl": ".",
         "allowSyntheticDefaultImports": true,
@@ -26,7 +19,8 @@
         "noFallthroughCasesInSwitch": true,
         "removeComments": true,
         "allowJs": true,
-        "declaration": true
+        "declaration": true,
+        "resolvePackageJsonImports": true
     },
-    "exclude": ["node_modules", "dist", "template", "tester"]
+    "exclude": ["/node_modules", "dist", "template"]
 }
