@@ -23,7 +23,8 @@ export const prismaInstaller: Installer = async ({ projectPath }) => {
     // add dependecies and scripts for prisma
     const PackageJsonDest = path.join(projectPath, "package.json");
     await upsertField(PackageJsonDest, [
-        ["devDependencies", "prisma", "^4.10.0"],
+        ["devDependencies", "prisma", "^5.3.1"],
+        ["dependencies", "@prisma/client", "^5.3.1"],
         ["scripts", "db:studio", "prisma studio"],
         ["scripts", "db:migrate", "prisma migrate dev --name"],
     ]);

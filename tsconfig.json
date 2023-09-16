@@ -2,12 +2,17 @@
     "compilerOptions": {
         "target": "ESNext",
         "module": "NodeNext",
-        "lib": ["es6", "es2017", "esnext.asynciterable"],
+        "lib": [
+            "es2022",
+            "esnext.asynciterable"
+        ],
         "sourceMap": true,
         "outDir": "dist",
         "rootDir": "src",
         "strict": true,
-        "types": ["node"],
+        "types": [
+            "node"
+        ],
         "esModuleInterop": true,
         "moduleResolution": "nodenext",
         "resolveJsonModule": true,
@@ -20,7 +25,12 @@
         "removeComments": true,
         "allowJs": true,
         "declaration": true,
-        "resolvePackageJsonImports": true
+        "resolvePackageJsonImports": true,
+        "skipLibCheck": true
     },
-    "exclude": ["/node_modules", "dist", "template"]
+    "exclude": [
+        "node_modules",
+        "dist",
+        "template"
+    ]
 }

@@ -52,10 +52,8 @@ function isUnderGit(folderPath: string): boolean {
             cwd: folderPath,
             stdio: "ignore",
         });
-        console.log("under git");
         return true;
     } catch (e) {
-        console.error("error not under git");
         return false;
     }
 }
@@ -111,7 +109,6 @@ async function questionsSession(projectName?: string) {
         ],
         { projectName }
     );
-    console.log('🪵 file "init.ts" ~  line "73" ~ token ~ answers = ', answers);
     return answers;
 }
 
@@ -122,6 +119,19 @@ async function questionsSession(projectName?: string) {
  */
 export default async function initProject(FName?: string): Promise<void> {
     try {
+console.log(`
+
+  ______                 
+ |___  /                 
+    / / __ _  __ _ _   _ 
+   / / / _\` |/ _\` | | | |
+  / /_| (_| | (_| | |_| |
+ /_____\__,_|\__, |\__, |
+              __/ | __/ |
+             |___/ |___/ 
+
+`);
+
         const answers = await questionsSession(FName);
         const newProjectPath = path.resolve(answers.projectName);
 
@@ -142,6 +152,14 @@ export default async function initProject(FName?: string): Promise<void> {
             }
         }
 
+        console.log(`
+Created "${answers.projectName}" successfully. do the following to install your project dependencies
+
+1. "cd ${answers.projectName}"
+2. "npm i" or "pnpm i"
+
+Thank You
+`)
         // TODO install node dependencies
         // installDependencies(testDep)
     } catch (err) {

@@ -4,6 +4,8 @@ import { prismaInstaller } from "./install-prisma.js";
 export type Installer = (config: { projectPath: string }) => Promise<void>;
 
 export const availableAddOnes = ["prisma"] as const;
+//TODO support deez nuts
+// export const availableAddOnes = ["prisma", "express", "fastify", "jest", "vitest"] as const;
 
 type AvailableAddOnesInstallerMap = {
     [key in typeof availableAddOnes[number]]: Installer;
